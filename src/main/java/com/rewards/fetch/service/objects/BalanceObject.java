@@ -15,6 +15,10 @@ public class BalanceObject {
         this.payer = payer;
     }
 
+    public BalanceObject() {
+
+    }
+
     public void addPoints(int points) {
         this.points += points;
     }
@@ -25,5 +29,14 @@ public class BalanceObject {
 
     public String getPayer() {
         return this.payer;
+    }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " payer='" + payer + "'" +
+            ", points='" + points + "'" +
+            "}";
     }
 }

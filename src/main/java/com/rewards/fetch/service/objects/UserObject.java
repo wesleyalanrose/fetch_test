@@ -34,6 +34,7 @@ public class UserObject {
 
     /**
      * "Spends" points if a transaction gives a negative total from the "add transaction" route
+     * Will go negative if "payer" doesn't exist in balances
      * 
      * @param pointTotal
      * @param payer
@@ -42,12 +43,18 @@ public class UserObject {
         Optional<BalanceObject> bo = balances.stream().filter(b -> b.payer.equals(payer)).reduce((a, b) -> b);
         if (bo.isPresent()) {
             BalanceObject boReal = bo.get();
-            boReal.subtractPoints(pointTotal);
+            boReal.subtractPoints(Math.abs(pointTotal));
         } else {
             balances.add(new BalanceObject(payer, pointTotal));
         }
     }
     
+    /**
+     * Spend points for a spend endpoint call. 
+     * @param pointTotal
+     * @param list
+     * @return
+     */
     public ArrayList<BalanceObject> spendPoints(int pointTotal, ArrayList<BalanceObject> list) {
         
         do {
@@ -63,22 +70,33 @@ public class UserObject {
             }
 
             if (pointTotal > localB.points) {
+                boReal.subtractPoints(localB.points);
                 pointTotal -= localB.points;
                 transactions.remove(0);
                 list = spendPoints(pointTotal, list);
-            } else if (pointTotal <= localB.points) {
                 pointTotal = 0;
+            } else if (pointTotal <= localB.points) {
+                boReal.subtractPoints(pointTotal);
                 
-                boReal.points -= localB.points;
-
+                transactions.get(0).pointsAvailable -= pointTotal;
+                
                 if (pointTotal == localB.points) {
                     transactions.remove(0);
-                } else {
-                    transactions.get(0).pointsAvailable -= pointTotal;
-                }
+                } 
+                pointTotal = 0;
             } 
         } while (pointTotal > 0);
 
         return list;
+    }
+
+    public boolean checkPointsTotal(int spendAmount) {
+        int sum = 0;
+
+        for (BalanceObject bo : this.balances) {
+            sum += bo.points;
+        }
+
+        return (sum >= spendAmount);
     }
 }

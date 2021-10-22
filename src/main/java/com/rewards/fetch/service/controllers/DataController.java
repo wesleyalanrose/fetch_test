@@ -1,8 +1,9 @@
 package com.rewards.fetch.service.controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,9 +17,10 @@ import javax.ws.rs.core.Response;
 import com.rewards.fetch.service.objects.BalanceObject;
 import com.rewards.fetch.service.objects.TransactionObject;
 import com.rewards.fetch.service.objects.UserObject;
-import com.rewards.fetch.service.util.Pair;
 
-@Path("/fetch_test")
+import org.apache.http.HttpStatus;
+
+@Path("/fetch")
 @Produces(MediaType.APPLICATION_JSON)
 public class DataController extends Controller{
     
@@ -32,44 +34,61 @@ public class DataController extends Controller{
     }
 
     @POST
-    @Path("/add")
+    @Path("/add_points")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addPoints(List<TransactionObject> transactions) {
+        System.out.println("Transaction adding");
 
         for (TransactionObject transaction : transactions) {
+            System.out.println(transaction.toString());
             if (transaction.points > 0) {
                 user.addPoints(transaction);
             } else if (transaction.points < 0) {
+                Collections.sort(user.transactions, Comparator.comparing(TransactionObject::getTimestamp));
                 user.spendPoints(transaction.points, transaction.payer);
             }
         }
-
+        System.out.println("Finished transaction");
         return Response.ok().build();
     }
 
     @GET
-    @Path("/spend")
+    @Path("/spend_points")
     @Produces(MediaType.APPLICATION_JSON)
     public Response spendPoints(@QueryParam("points") int points) {
-        List<BalanceObject> balances = user.spendPoints(points, new ArrayList<BalanceObject>());
+        System.out.println("Spending "+ points +" points");
+        boolean checkSumPoints = user.checkPointsTotal(points);
+        
+        if (checkSumPoints) {   
+            Collections.sort(user.transactions, Comparator.comparing(TransactionObject::getTimestamp));
+            
+            List<BalanceObject> balances = user.spendPoints(points, new ArrayList<BalanceObject>());
 
-        for (BalanceObject balance : balances) {
-            BalanceObject bo = balances.stream().filter(b -> b.payer.equals(balance.payer)).reduce((a, b) -> b).orElse(null);
-            bo.points += balance.points;
+            for (BalanceObject balance : balances) {
+                BalanceObject bo = user.balances.stream().filter(b -> b.payer.equals(balance.payer)).reduce((a, b) -> b).orElse(null);
+                bo.points += balance.points;
+            }
+
+            return Response.ok(balances).build();
+        } else {
+            return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, "Not enough points available");
         }
-
-        return Response.ok(balances).build();
     }
 
     @GET
-    @Path("/balance")
+    @Path("/check_balance")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBalance() {
-        List<Pair<String, Integer>> balances = new ArrayList<Pair<String, Integer>>();
+        System.out.println("Requesting balance");
+        
+        List<String> balances = new ArrayList<String>();
 
         for (BalanceObject balance : user.balances) {
-            balances.add(new Pair<String,Integer>(balance.payer, balance.points));
+            String json = "{'"+balance.payer + "': " + balance.points+"}";
+            System.out.println(json);
+            balances.add(json);
         }
-        return Response.ok(balances).build();
+
+        return Response.ok(balances, MediaType.APPLICATION_JSON).build();
     }
 }

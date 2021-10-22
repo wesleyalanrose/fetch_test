@@ -1,10 +1,11 @@
 package com.rewards.fetch.service.application;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
+
+import com.rewards.fetch.service.controllers.DataController;
 
 
 public class FetchApplication extends Application {
@@ -15,7 +16,8 @@ public class FetchApplication extends Application {
      * Default constructor for the GeoApplication.
      */
     public FetchApplication() {
-
+        singletons.add(new DataController());
+        System.out.println("Rewards system online");
     }
 
     /**
