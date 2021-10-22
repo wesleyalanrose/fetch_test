@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Fetch Rewards Demo</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+	<div id="content">
+		INPUT TO ADD TRANSACTION
+		<form>
+			PAYER: <input type="text" id="payer">
+			POINTS: <input type="number" id="points"><br>
+			TIMESTAMP: <input type="datetime-local" id="timestamp">
+			<input type="submit" id="submit" onclick="add_transaction()">
+		</form>
+		<ul id="transactions"></ul>
+		OR CLICK TO ADD ALL FROM ABOVE LIST: <input type="submit" id="submit_all" onclick="add_all()">
+		<hr><hr>
+		SPEND POINTS: <input type="number" id="spend_points">
+		<input type="submit" id="submit_spend" onclick="spend_points()">
+	</div>
+	<hr><hr>
+	OUTPUT:
+	<div>
+		<ul id="output"></ul>
+	</div>
+	<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>	
