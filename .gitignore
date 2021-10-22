@@ -5,7 +5,7 @@
 .classpath
 .gitattributes
 .project
-
+.vscode
 
 
 # Ignore Gradle build output directory
