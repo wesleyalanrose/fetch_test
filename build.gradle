@@ -3,19 +3,25 @@ plugins {
     id 'war'
 }
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "https://openhab.jfrog.io/openhab/libs-release/"
+    }
 }
 
 dependencies {
     implementation 'com.google.guava:guava:26.0-jre'
     testImplementation 'junit:junit:4.12'
 
-    compile group: 'org.jboss.resteasy', name: 'resteasy-jaxrs', version: '3.7.0.Final'
-    compile group: 'org.jboss.resteasy', name: 'resteasy-jackson-provider', version: '3.7.0.Final'
+    implementation 'org.jboss.resteasy:resteasy-jaxrs:3.7.0.Final'
+    implementation 'org.jboss.resteasy:resteasy-jackson-provider:3.7.0.Final'
+    implementation 'org.eclipse.orbit.bundles:com.google.gson:2.8.2.v20180104-1110'
+
+
 }
 
 war {
