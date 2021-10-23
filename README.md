@@ -17,7 +17,7 @@ Navigate to wherever the webserver is directing ex: localhost:8000/web_files
 
 This will display a VERY rudimentary UI. 
 
-You can manually add "transactions," or click the second button to just add that whole <ul>
+You can manually add "transactions," or click the second button to just add that whole ul
 
 You can input a number of points to spend. 
 
