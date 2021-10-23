@@ -2,12 +2,15 @@
 Code test for Fetch Rewards backend engineer position
 
 # Prerequisites
-Tomcat (or whatever you personally use to deploy WAR files)
+Tomcat (or whatever you personally use to deploy WAR files)  
+
 Gradle 
 
 # Executing
 From within the project folder execute:
-  gradle build war
+	
+	gradle build war
+	
 This will generate a .war file in /build/libs/
 
 Deploy that file on your choice of webserver software (I used Tomcat for its simplicity in this case)
