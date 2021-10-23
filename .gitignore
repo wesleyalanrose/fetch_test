@@ -9,7 +9,9 @@
 
 
 # Ignore Gradle build output directory
-build
+build/classes
+build/bin
+build/tmp
 bin
 gradle/wrapper
 
