@@ -7,7 +7,11 @@ import javax.ws.rs.core.Application;
 
 import com.rewards.fetch.service.controllers.DataController;
 
-
+/**
+ * The web app instantiator. 
+ * 
+ * @author Wesley Rose
+ */
 public class FetchApplication extends Application {
 
     private final Set<Object> singletons = new HashSet<>();   // Set of controllers

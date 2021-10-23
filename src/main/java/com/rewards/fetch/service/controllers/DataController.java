@@ -20,6 +20,11 @@ import com.rewards.fetch.service.objects.UserObject;
 
 import org.apache.http.HttpStatus;
 
+/**
+ * API Controller. Holds all the endpoints.
+ * 
+ * @author Wesley Rose
+ */
 @Path("/fetch")
 @Produces(MediaType.APPLICATION_JSON)
 public class DataController extends Controller{
@@ -33,6 +38,13 @@ public class DataController extends Controller{
         user = new UserObject("wrose@fetchrewards.com");
     }
 
+    /**
+     * The "add" endpoint. Checks if points being added are negative and will remove them from an older transaction from that payer.
+     * If that payer doesn't exist. Will create a new payer in the user.balances list and start from negative.
+     *
+     * @param transactions
+     * @return
+     */
     @POST
     @Path("/add_points")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -52,6 +64,12 @@ public class DataController extends Controller{
         return Response.ok().build();
     }
 
+    /**
+     * "Spend points" endpoint. First checks that the desired total being spent is available, then 
+     * calls UserObject.spendPoints() with a fresh ArrayList to be filled with the payers and their totals.
+     * @param points
+     * @return
+     */
     @GET
     @Path("/spend_points")
     @Produces(MediaType.APPLICATION_JSON)
@@ -75,6 +93,9 @@ public class DataController extends Controller{
         }
     }
 
+    /**
+     * "Balance" endpoint. Builds a json from the user.balances list and returns. 
+     */
     @GET
     @Path("/check_balance")
     @Produces(MediaType.APPLICATION_JSON)

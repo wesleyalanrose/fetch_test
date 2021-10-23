@@ -4,6 +4,11 @@ import java.sql.Timestamp;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+/**
+ * Simple "transaction" storage object. Extends BalanceObject since they need similar data.
+ * 
+ * @author Wesley Rose
+ */
 public class TransactionObject extends BalanceObject {
     
     @JsonProperty public Timestamp timestamp;

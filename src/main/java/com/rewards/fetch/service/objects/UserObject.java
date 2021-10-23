@@ -6,6 +6,11 @@ import java.util.Optional;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+/**
+ * User profile object. Would be two database tables in an ideal world. 
+ * 
+ * @author Wesley Rose
+ */
 public class UserObject {
     @JsonProperty public String userID;
     @JsonProperty public List<BalanceObject> balances;
@@ -51,6 +56,12 @@ public class UserObject {
     
     /**
      * Spend points for a spend endpoint call. 
+     * 
+     * Checks the oldest transaction record for amount of points available to spend. If less than the total
+     * being spent, deletes the record and recursively calls with the points being spent - that transaction.
+     * 
+     * Keeps a running list of payers and the amount of points coming from each.
+     * 
      * @param pointTotal
      * @param list
      * @return
@@ -90,6 +101,12 @@ public class UserObject {
         return list;
     }
 
+    /**
+     * Just checks that the desired amount being spent is greater than the current sum of all points totals
+     * 
+     * @param spendAmount
+     * @return boolean
+     */
     public boolean checkPointsTotal(int spendAmount) {
         int sum = 0;
 

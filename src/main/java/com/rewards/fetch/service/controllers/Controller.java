@@ -7,6 +7,11 @@ import javax.ws.rs.core.Response;
 
 import com.rewards.fetch.service.objects.ErrorObject;
 
+/**
+ * Class just exists for error handling. I always include it.
+ * 
+ * @author Wesley Rose
+ */
 public class Controller {
     /**
      * Simply builds an error response containing an ErrorObject object.
